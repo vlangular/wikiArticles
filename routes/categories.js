@@ -1,14 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/categories', function(req, res) {
-    var db = req.db;
-    var collection = db.get('categorycollection');
-    collection.find({},{},function(e,docs){
-        res.render('categorycollection', {
-            "categorycollection" : docs
-        });
-    });
+var Category = require('../models/categories.model');
+
+router.get('/', function(req, res, next) {
+  Category.getCategories(function(err, category) {
+      if(err) {
+          console.log(err);
+      } else {
+          res.json(category);
+      }
+  });
 });
 
 module.exports = router;

@@ -7,7 +7,8 @@ var bodyParser = require('body-parser');
 
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-var db = mongoose('localhost:27017/')
+var db = mongoose.connection;
+mongoose.connect('mongodb://localhost:27017/wikiArticleDb');
 
 var routes = require('./routes/index');
 var articles = require('./routes/articles');
@@ -26,12 +27,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Make our db accessible to our router
-app.use(function(req,res,next){
-    req.db = db;
-    next();
-});
 
 app.use('/', routes);
 app.use('/articles', articles);
